@@ -1,252 +1,131 @@
-import time
-
-print("Welcome to BOXED\n" +
-
-"\n" + "\n" +
-
-"use WASD for movement\n" +
-
-"\n" + "\n")
+#The underground mapping tool (UMT)
 
 
-game = True
+#diagram for room vars.
 
-level = 1
+#   VISIBLE ATRIBUTES
 
-#starting point
-char_pos = 1
+#   0 = corner, "+"
+#   1 = horizontal wall, " -"
+#   3 = vertical wall, "|"
+#   4 = traversable space, " "
 
-#map1 global variables
-var1 = " "
-var2 = " "
-var3 = " "
-var4 = " "
-var5 = " "
-var6 = " "
-var7 = " "
-var8 = " "
-var9 = " "
+#   INVISIBLE ATRIBUTES
 
-#map2 global variables
-var2_1 = " "
-var2_2 = " "
-var2_3 = " "
-var2_4 = " "
-var2_5 = " "
-var2_6 = "*"
-var2_7 = " "
-var2_8 = " "
-var2_9 = " "
+#   2 = corner 
+#   5 = horizontal wall
+#   6 = verical wall
+#   7 = traversable space
 
+#   DOOR TYPES "[ ]" (VISABLE)
 
+#   10 = w, up
+#   20 = s, down
+#   30 = a, left
+#   40 = d, right
 
-    ###     ###          ###       ########
-   #####   #####        #####      ##     ##
-  ##   ## ##   ##      ##   ##     ##      ##
-  ##   ## ##   ##      ##   ##     ##     ##
- ##      #      ##    #########    ########
- ##             ##   ##       ##   ##
- ##             ##   ##       ##   ##
+#   DOOR TYPES "[ ]" (INVISABLE)
 
-#################################################################
+#   -10 = w, up
+#   -20 = s, down
+#   -30 = a, left
+#   -40 = d, right
 
-def draw_map():
+#   VARIABLES
 
-#sets traversable grid to blank
-   
-    if level == 1:
+char_row = 7
 
-        print("Lv1")
-
-        print(
-        "+ - - - +\n" + 
-        "|" + " " + var1 + " " + var2 + " " + var3 + " " + "|\n" + 
-        "|" + " " + var4 + " " + var5 + " " + var6 + " " + "|\n" + 
-        "|" + " " + var7 + "[" + var8 + "]" + var9 + " " + "|\n" + 
-        "+ - - - +"
-        )
-        print("you moved!\n")
-
-    elif level == 2:
-
-        print("Lv2")
-        print(
-        "+ - - - +\n" + 
-        "|" + " " + var2_1 + "[" + var2_2 + "]" + var2_3 + " " + "|\n" + 
-        "|" + " " + var2_4 + " " + var2_5 + "  " + var2_6 + "|\n" + 
-        "|" + " " + var2_7 + " " + var2_8 + " " + var2_9 + " " + "|\n" + 
-        "+ - - - +"
-        )
-        print("you moved!\n")
+char_column = 7
 
 
-def is_level_active():
+#draw functon assums world has no errors
+#somebodys elses resposibily to ensure character is in a legal position
 
-#map1 global variables
-    global var1
-    global var2
-    global var3
-    global var4
-    global var5
-    global var6
-    global var7
-    global var8
-    global var9
+#FUNCTIONS
 
-#map2 global variables
-    global var2_1
-    global var2_2
-    global var2_3
-    global var2_4
-    global var2_5
-    global var2_6
-    global var2_7
-    global var2_8
-    global var2_9
+def is_wall(row, column):
+    if row >= len(room_parts):
+        return True
+    if row < 0:
+        return True
+    #assums that all rows are the same size
+    if column >= len(room_parts[0]):
+        return True
+    if column < 0:
+        return True
+    if room_parts[row][column] in(0, 1, 2, 3, 5, 6):
+        return True
 
-#checks for player position, and assigns position based on that data
+    return False
 
-#map1 update statements
-
-    var1 = " "
-    var2 = " "
-    var3 = " "
-    var4 = " "
-    var5 = " "
-    var6 = " "
-    var7 = " "
-    var8 = " "
-    var9 = " "
-
-    if char_pos == 1:
-        var1 = "\b"
-
-    if char_pos == 2:
-        var2 = "\b"
-
-    if char_pos == 3:
-        var3 = "\b"
-
-    if char_pos == 4:
-        var4 = "\b"
-
-    if char_pos == 5:
-        var5 = "\b"
-
-    if char_pos == 6:
-        var6 = "\b"
-
-    if char_pos == 7:
-        var7 = "\b"
-
-    if char_pos == 8:
-        var8 = "\b"
-
-    if char_pos == 9:
-        var9 = "\b"
-
-
-#map2 update statements
-    var2_1 = " "
-    var2_2 = " "
-    var2_3 = " "
-    var2_4 = " "
-    var2_5 = " "
-    var2_6 = "*"
-    var2_7 = " "
-    var2_8 = " "
-    var2_9 = " "
-
-    if char_pos == 1:
-        var2_1 = "\b"
-
-    if char_pos == 2:
-        var2_2 = "\b"
-
-    if char_pos == 3:
-        var2_3 = "\b"
-
-    if char_pos == 4:
-        var2_4 = "\b"
-
-    if char_pos == 5:
-        var2_5 = "\b"
-
-    if char_pos == 6:
-        var2_6 = "\b"
-
-    if char_pos == 7:
-        var2_7 = "\b"
-
-    if char_pos == 8:
-        var2_8 = "\b"
-
-    if char_pos == 9:
-        var2_9 = "\b"
-
-    if level == 1:
-        return char_pos != 8
-    elif level == 2:
-        return char_pos != 6
-
-def change_level():
-    global level
-    global game
-    global char_pos
-
-    if level == 2:
-        is_level_active()
-        draw_map()
-        return False
-
-    is_level_active()
-    draw_map()
-    level = 2
-    game = True
-    char_pos = 2
-    is_level_active()
-    #draw_map()
-    return True
-
-
-
-
-"""
-for char_pos in range (1, 9):
-    if level == 1:
-        print(char_pos)
-        char_pos = int(input())
-        print("Lv1")
-        draw_map()
-    
-        if char_pos == 8:
-            print("you expanded the map!\n")
-            level = 2
-        else:
-            print("you moved!")
     
 
 
-if level == 2:
-    char_pos = 2
-    print("")
-    print("entering Lv2")
-    draw_map2()
+def draw():
+    current_row_num = 0
+    for current_row in room_parts:
+        #this is pre column processing
+        temp_str = ""
+        current_column_num = 0
+        for list_item in current_row:
+            if current_column_num == char_column and current_row_num == char_row:
+                temp_str = temp_str + "\b"
+            elif list_item == 4:
+                temp_str = temp_str + " "
+            elif list_item == 0:
+                temp_str = temp_str + "+"
+            elif list_item == 1:
+                temp_str = temp_str + "-"
+            elif list_item == 3:
+                temp_str = temp_str + "|"
+            elif list_item == 10:
+                temp_str = temp_str + "^"
+            elif list_item == 20:
+                temp_str = temp_str + "⌄"
+            elif list_item == 30:
+                temp_str = temp_str + "<"
+            elif list_item == 40:
+                temp_str = temp_str + ">"
+            else:
+                temp_str = temp_str + "?"
+            temp_str = temp_str + " "
+            current_column_num += 1
+        #this is post column processing
+        print(temp_str)
+        current_row_num += 1
+
+def controller():
+    global char_column
+    global char_row
+    button = input()
+    if button == "a" and not is_wall(char_row, char_column - 1):
+        char_column -= 1
+    if button == "d" and not is_wall(char_row, char_column + 1):
+        char_column += 1
+    if button == "w" and not is_wall(char_row - 1, char_column):
+        char_row -= 1
+    if button == "s" and not is_wall(char_row + 1, char_column):
+        char_row += 1    
 
 
-for char_pos in range (1, 9):
-    char_pos = int(input())
-    print("Lv2")
-    draw_map2()
-    
-    print("you moved!")
-    break
-"""
 
-is_level_active()
-while game:
-    draw_map()
-    char_pos = int(input())
-    game = is_level_active()
-    if game == False:
-        game = change_level()
+room_parts =[
+[4,4,4,4,4,0,1,1,1,0,4,4,4,4,4],
+[4,4,4,4,4,3,4,4,4,3,4,4,4,4,4],
+[4,4,4,4,4,3,4,4,4,3,4,4,4,4,4],
+[4,4,4,4,4,3,4,4,4,3,4,4,4,4,4],
+[4,4,4,4,4,0,1,20,1,0,4,4,4,4,4],
+[0,1,1,1,0,0,1,10,1,0,0,1,1,1,0],
+[3,4,4,4,3,3,4,4,4,3,3,4,4,4,3],
+[3,4,4,4,40,30,4,4,4,40,30,4,4,4,3],
+[3,4,4,4,3,3,4,4,4,3,3,4,4,4,3],
+[0,1,1,1,0,0,1,20,1,0,0,1,1,1,0],
+[4,4,4,4,4,0,1,10,1,0,4,4,4,4,4],
+[4,4,4,4,4,3,4,4,4,3,4,4,4,4,4],
+[4,4,4,4,4,3,4,4,4,3,4,4,4,4,4],
+[4,4,4,4,4,3,4,4,4,3,4,4,4,4,4],
+[4,4,4,4,4,0,1,1,1,0,4,4,4,4,4]
+]
+
+draw()
+print("\n")
