@@ -76,46 +76,46 @@ inventory = True
 #      two "sources of truth" to be the actual source of truth. My recommendation
 #      is to use the array "invintory" vs the sets of globals.
 
-slot1 = 4
+slot1 = " "
 
-slot2 = 4
+slot2 = " "
 
-slot3 = 4
+slot3 = " "
 
-slot4 = 4
+slot4 = " "
 
-slot5 = 4
+slot5 = " "
 
-slot6 = 4
+slot6 = " "
 
-slot7 = 4
+slot7 = " "
 
-slot8 = 4
+slot8 = " "
 
-slot9 = 4
+slot9 = " "
 
 
 
 
 #   GLOBAL VARIABLES FOR INVENTORY SELECTORS
 
-slot1_select = 1
+slot1_select = "-"
 
-slot2_select = 1
+slot2_select = "-"
 
-slot3_select = 1
+slot3_select = "-"
 
-slot4_select = 1
+slot4_select = "-"
 
-slot5_select = 1
+slot5_select = "-"
 
-slot6_select = 1
+slot6_select = "-"
 
-slot7_select = 1
+slot7_select = "-"
 
-slot8_select = 1
+slot8_select = "-"
 
-slot9_select = 1
+slot9_select = "-"
 
 
 #draw functon assums world has no errors
@@ -202,45 +202,11 @@ def draw_room_parts():
 
 def draw_inventory():
     print("\n" + "use 1u, 2u, 3u ect. to select and use an item." + "\n\n" + "press q to quit the inventory" + "\n")
-    current_row_num = 0
-    # [TL] This draw function looks only at the "invintory" array for 
-    #      deciding what to draw. It turns out that the array elements in
-    #      "invintory" are never modified (by "controller_in_inventory"),
-    #      so this function always draws the same thing.
-    for current_row in invintory:
-        #this is pre column processing
-        temp_str = ""
-        current_column_num = 0
-        for list_item in current_row:
-            if current_column_num == char_column and current_row_num == char_row:
-                temp_str = temp_str + "\b"
-            elif list_item in(2, 4, 5, 6, 7, 9, -10, -20, -30, -40):
-                temp_str = temp_str + " "
-            elif list_item == 0:
-                temp_str = temp_str + "+"
-            elif list_item == 1:
-                temp_str = temp_str + "-"
-            elif list_item == 3:
-                temp_str = temp_str + "|"
-            elif list_item == 10:
-                temp_str = temp_str + "^"
-            elif list_item == 20:
-                temp_str = temp_str + "^"
-            elif list_item == 30:
-                temp_str = temp_str + "<"
-            elif list_item == 40:
-                temp_str = temp_str + ">"
-            elif list_item == 8:
-                temp_str = temp_str + "*"
-            elif list_item == slot1_select:
-                temp_str += 10
-            else:
-                temp_str = temp_str + "?"
-            temp_str = temp_str + " "
-            current_column_num += 1
-        #this is post column processing
-        print(temp_str)
-        current_row_num += 1
+    
+    temp_str  = "+ - +\n"
+    temp_str += "| " + slot1 + " |\n"
+    temp_str += "+ " + slot1_select + " +"
+    print(temp_str)
     print("\n\n\n")
 
 
@@ -311,25 +277,18 @@ def controller_in_inventory():
     if button == "q":
         controller_type = 0
         scene_type = 0
-    if button == "1":
-        slot1_select = 10
-    if button == "2":
-        slot2_select = 10
-    if button == "3":
-        slot3_select = 10
-    if button == "4":
-        slot4_select = 10
-    if button == "5":
-        slot5_select = 10
-    if button == "6":
-        slot6_select = 10
-    if button == "7":
-        slot7_select = 10
-    if button == "8":
-        slot8_select = 10
-    if button == "9":
-        slot9_select = 10
+    elif button == "1":
+        clear_slot_selection()
+        slot1_select = "^"
+    else:
+        clear_slot_selection() # any other key clears all slot selections
 
+
+def clear_slot_selection():
+    global slot1_select
+    
+    slot1_select = "-"
+    
 #    return(slot1_select, slot2_select, slot3_select, slot4_select, slot5_select, slot6_select, slot7_select, slot8_select, slot9_select, controller_type, scene_type, inventory)
 #    set_inventory()
 
@@ -548,11 +507,7 @@ invintory =[
 #      the 2nd array element (where you have the 'slot1' variable being read) and 
 #      changes it.
 #      "
-invintory = [
-[0,1,0],
-[3,slot1,3],
-[0,slot1_select,0]
-]
+
 
 #if inventory is True:
 #    print("+ - +   + - +   + - +   + - +\n" +
