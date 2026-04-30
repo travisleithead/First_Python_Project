@@ -67,6 +67,15 @@ controller_type = 1
 
 inventory = True
 
+# [TL] I noticed that you have TWO "sources of truth" for your inventory.
+#      The first are these sets of global variables slotX and slotX_select
+#      which are the globals you are changing in the inventory controller.
+#      The second are down in another global variable that you called
+#      "invintory" (not to be confused with "inventory" ;-)
+#      To get the inventory system working, you'll need to pick one of these
+#      two "sources of truth" to be the actual source of truth. My recommendation
+#      is to use the array "invintory" vs the sets of globals.
+
 slot1 = 4
 
 slot2 = 4
@@ -194,6 +203,10 @@ def draw_room_parts():
 def draw_inventory():
     print("\n" + "use 1u, 2u, 3u ect. to select and use an item." + "\n\n" + "press q to quit the inventory" + "\n")
     current_row_num = 0
+    # [TL] This draw function looks only at the "invintory" array for 
+    #      deciding what to draw. It turns out that the array elements in
+    #      "invintory" are never modified (by "controller_in_inventory"),
+    #      so this function always draws the same thing.
     for current_row in invintory:
         #this is pre column processing
         temp_str = ""
@@ -515,6 +528,26 @@ invintory =[
 
 #    TEST inventory 1by1
 
+# [TL] This is probably where your assumption was incorrect. By putting the 
+#      variables 'slot1' and 'slot1_select' into the array, I can see that
+#      you hoped that the variables would "stay" there and that by changing
+#      the global variables, it would update these elements in the array.
+#      Unfortunately, it doesn't work like that. This code below only ever runs
+#      once, to setup the array values. When it's running, the 'slot1' variable
+#      is read (to extract the value it contains, which starts out as 4) and 
+#      it's actually the literal value '4' that gets put into the array when it
+#      is made, not the variable itself. Make sense? So, from here on out, 
+#      whenever you are changing any of these global variables they ARE actually
+#      getting updated, BUT the values in this array are staying the same.
+#      If this array stays your "source of truth" for the inventory data, then
+#      you need to modify the specific values in this array in order for the
+#      "draw_inventory" function to see the changes. For example, the inventory
+#      controller would need to change 'invintory' as follows to change this data:
+#        invintory[1][1] = <new value for slot1>
+#      The above line gets the 2nd sub-array out of 'invintory', then references
+#      the 2nd array element (where you have the 'slot1' variable being read) and 
+#      changes it.
+#      "
 invintory = [
 [0,1,0],
 [3,slot1,3],
