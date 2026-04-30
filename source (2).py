@@ -295,41 +295,30 @@ def controller_in_inventory():
 #    global inventory
     global controller_type
     global scene_type
-    
-    global slot1_select
-    global slot2_select
-    global slot3_select
-    global slot4_select
-    global slot5_select
-    global slot6_select
-    global slot7_select
-    global slot8_select
-    global slot9_select
 
+    global invintory
+    
 #    inventory = True
     button = str(input())
     if button == "q":
         controller_type = 0
         scene_type = 0
-    if button == "1":
-        slot1_select = 10
-    if button == "2":
-        slot2_select = 10
-    if button == "3":
-        slot3_select = 10
-    if button == "4":
-        slot4_select = 10
-    if button == "5":
-        slot5_select = 10
-    if button == "6":
-        slot6_select = 10
-    if button == "7":
-        slot7_select = 10
-    if button == "8":
-        slot8_select = 10
-    if button == "9":
-        slot9_select = 10
+    elif button == "1":
+        clear_inventory_selections()
+        invintory[2][1] = 10
+    else:
+        # If any other key is pressed, then clear all the selections
+        clear_inventory_selections()
+    
 
+# Helper function to clear all the inventory selection 
+# variables before setting the correct selection when
+# it changes
+def clear_inventory_selections():
+    global invintory
+    invintory[2][1] = 1
+    # ... etc
+    
 #    return(slot1_select, slot2_select, slot3_select, slot4_select, slot5_select, slot6_select, slot7_select, slot8_select, slot9_select, controller_type, scene_type, inventory)
 #    set_inventory()
 
