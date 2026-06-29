@@ -171,7 +171,7 @@ def draw_room_parts():
         current_column_num = 0
         for list_item in current_row:
             if current_column_num == char_column and current_row_num == char_row:
-                temp_str = temp_str + "\b"
+                temp_str = temp_str + "◻"
             elif list_item in(2, 4, 5, 6, 7, 9, -10, -20, -30, -40):
                 temp_str = temp_str + " "
             elif list_item == 0:
@@ -212,9 +212,7 @@ def draw_inventory():
         temp_str = ""
         current_column_num = 0
         for list_item in current_row:
-            if current_column_num == char_column and current_row_num == char_row:
-                temp_str = temp_str + "\b"
-            elif list_item in(2, 4, 5, 6, 7, 9, -10, -20, -30, -40):
+            if list_item in(2, 4, 5, 6, 7, 9, -10, -20, -30, -40):
                 temp_str = temp_str + " "
             elif list_item == 0:
                 temp_str = temp_str + "+"
@@ -291,44 +289,47 @@ def controller_in_rooms():
 
 def controller_in_inventory():
 
-
-#    global inventory
+#   global inventory
     global controller_type
     global scene_type
-    
-    global slot1_select
-    global slot2_select
-    global slot3_select
-    global slot4_select
-    global slot5_select
-    global slot6_select
-    global slot7_select
-    global slot8_select
-    global slot9_select
 
-#    inventory = True
+#   inventory = True
+
     button = str(input())
     if button == "q":
         controller_type = 0
         scene_type = 0
+
+    invintory[1][1] = 8
+
+    invintory[2][1] = 1
+    invintory[2][5] = 1
+    invintory[2][9] = 1
+    invintory[2][13] = 1
+    invintory[6][1] = 1
+    invintory[6][5] = 1
+    invintory[6][9] = 1
+    invintory[6][13] = 1
+    invintory[6][18] = 1
+    
     if button == "1":
-        slot1_select = 10
+       invintory[2][1] = 10
     if button == "2":
-        slot2_select = 10
+       invintory[2][5] = 10
     if button == "3":
-        slot3_select = 10
+       invintory[2][9] = 10
     if button == "4":
-        slot4_select = 10
+       invintory[2][13] = 10
     if button == "5":
-        slot5_select = 10
+       invintory[6][1] = 10
     if button == "6":
-        slot6_select = 10
+       invintory[6][5] = 10
     if button == "7":
-        slot7_select = 10
+       invintory[6][9] = 10
     if button == "8":
-        slot8_select = 10
+       invintory[6][13] = 10
     if button == "9":
-        slot9_select = 10
+       invintory[6][18] = 10
 
 #    return(slot1_select, slot2_select, slot3_select, slot4_select, slot5_select, slot6_select, slot7_select, slot8_select, slot9_select, controller_type, scene_type, inventory)
 #    set_inventory()
@@ -513,7 +514,7 @@ room_parts =[
 ]
 
 
-"""
+
 invintory =[
 
 [0,1,0,4,0,1,0,4,0,1,0,4,0,1,0],
@@ -524,7 +525,7 @@ invintory =[
 [3,slot5,3,4,3,slot6,3,4,3,slot7,3,4,3,slot8,3,4,4,3,slot9,3],
 [0,slot5_select,0,4,0,slot6_select,0,4,0,slot7_select,0,4,0,slot8_select,0,4,4,0,slot9_select,0],
 ]
-"""
+
 
 #    TEST inventory 1by1
 
@@ -548,11 +549,14 @@ invintory =[
 #      the 2nd array element (where you have the 'slot1' variable being read) and 
 #      changes it.
 #      "
+"""
 invintory = [
 [0,1,0],
 [3,slot1,3],
 [0,slot1_select,0]
 ]
+
+"""
 
 #if inventory is True:
 #    print("+ - +   + - +   + - +   + - +\n" +
