@@ -171,7 +171,7 @@ def draw_room_parts():
         current_column_num = 0
         for list_item in current_row:
             if current_column_num == char_column and current_row_num == char_row:
-                temp_str = temp_str + "\b"
+                temp_str = temp_str + "◻"
             elif list_item in(2, 4, 5, 6, 7, 9, -10, -20, -30, -40):
                 temp_str = temp_str + " "
             elif list_item == 0:
@@ -213,7 +213,7 @@ def draw_inventory():
         current_column_num = 0
         for list_item in current_row:
             if current_column_num == char_column and current_row_num == char_row:
-                temp_str = temp_str + "\b"
+                temp_str = temp_str + "◻"
             elif list_item in(2, 4, 5, 6, 7, 9, -10, -20, -30, -40):
                 temp_str = temp_str + " "
             elif list_item == 0:
