@@ -183,7 +183,7 @@ def draw_room_parts():
             elif list_item == 10:
                 temp_str = temp_str + "^"
             elif list_item == 20:
-                temp_str = temp_str + "^"
+                temp_str = temp_str + "∨"
             elif list_item == 30:
                 temp_str = temp_str + "<"
             elif list_item == 40:
@@ -223,7 +223,7 @@ def draw_inventory():
             elif list_item == 10:
                 temp_str = temp_str + "^"
             elif list_item == 20:
-                temp_str = temp_str + "^"
+                temp_str = temp_str + "∨"
             elif list_item == 30:
                 temp_str = temp_str + "<"
             elif list_item == 40:
@@ -300,7 +300,7 @@ def controller_in_inventory():
         controller_type = 0
         scene_type = 0
 
-    invintory[1][1] = 8
+
 
     invintory[2][1] = 1
     invintory[2][5] = 1
@@ -331,24 +331,65 @@ def controller_in_inventory():
     if button == "9":
        invintory[6][18] = 10
 
-#    return(slot1_select, slot2_select, slot3_select, slot4_select, slot5_select, slot6_select, slot7_select, slot8_select, slot9_select, controller_type, scene_type, inventory)
-#    set_inventory()
-
-#def set_inventory():
-#slot1_select, slot2_select, slot3_select, slot4_select, slot5_select, slot6_select, slot7_select, slot8_select, slot9_select, controller_type, scene_type, inventory = controller_in_inventory(slot1_select, slot2_select, slot3_select, slot4_select, slot5_select, slot6_select, slot7_select, slot8_select, slot9_select, controller_type, scene_type, inventory)
-
-"""
-scene_type = controller_in_inventory(scene_type)
-
-controller_type = controller_in_inventory(controller_type)
-
-slot1_select = controller_in_inventory(slot1_select)
-print(slot1_select)
-print(controller_type)
-"""    
+    if button == "1u":
+        move_object(1)
+    elif button == "2u":
+        move_object(2)
+    elif button == "3u":
+        move_object(3)
+    elif button == "4u":
+        move_object(4)
+    elif button == "5u":
+        move_object(5)
+    elif button == "6u":
+        move_object(6)
+    elif button == "7u":
+        move_object(7)
+    elif button == "8u":
+        move_object(8)
+    elif button == "9u":
+        ninth_slot_scan()
     
 
 
+def move_object(selected_item):
+    source_row = 1 if selected_item < 5 else 5
+    source_column = (((selected_item - 1) * 4) + 1) % 16
+    if invintory[source_row][source_column] == 4:
+        print("invalid entry: cannot relocate nonexistant item")
+        return
+    if invintory[5][18] != 4:
+        print("invalid entry: cannot replace occupied slot")
+        return
+    invintory[5][18] = invintory[source_row][source_column]
+    invintory[source_row][source_column] = 4
+    #   the four different slot collumn numbers that you are trying to land in are [5][1,5,9,13]
+    #   second row is 22 but we want it to be 1 I think what we do is mod it by 21
+
+
+
+def ninth_slot_scan():
+    if invintory[1][1] == 4:
+        invintory[1][1] = invintory[5][18]
+    elif invintory[1][5] == 4:
+        invintory[1][5] = invintory[5][18]
+    elif invintory[1][9] == 4:
+        invintory[1][9] = invintory[5][18]
+    elif invintory[1][13] == 4:
+        invintory[1][13] = invintory[5][18]
+    elif invintory[5][1] == 4:
+        invintory[5][1] = invintory[5][18]
+    elif invintory[5][5] == 4:
+        invintory[5][5] = invintory[5][18]
+    elif invintory[5][9] == 4:
+        invintory[5][9] = invintory[5][18]
+    elif invintory[5][13] == 4:
+        invintory[5][13] = invintory[5][18]
+    else:
+        print("inventory is full")
+        return
+    invintory[5][18] = 4
+    
 
 
 
@@ -526,6 +567,13 @@ invintory =[
 [0,slot5_select,0,4,0,slot6_select,0,4,0,slot7_select,0,4,0,slot8_select,0,4,4,0,slot9_select,0],
 ]
 
+
+invintory[1][1] = 8
+invintory[1][5] = 8
+invintory[1][9] = 8
+invintory[1][13] = 8
+invintory[5][1] = 8
+invintory[5][5] = 8
 
 #    TEST inventory 1by1
 
