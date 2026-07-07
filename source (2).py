@@ -352,23 +352,24 @@ def controller_in_inventory():
     
 
 
-def move_object(selected_item):
-    source_row = 1 if selected_item < 5 else 5
+
+    """source_row = 1 if selected_item < 5 else 5
     source_column = (((selected_item - 1) * 4) + 1) % 16
     if invintory[source_row][source_column] == 4:
-        print("invalid entry: cannot relocate nonexistant item")
+        print("cannot move nothing")
         return
     if invintory[5][18] != 4:
-        print("invalid entry: cannot replace occupied slot")
+        print("slot is full")
         return
     invintory[5][18] = invintory[source_row][source_column]
     invintory[source_row][source_column] = 4
     #   the four different slot collumn numbers that you are trying to land in are [5][1,5,9,13]
     #   second row is 22 but we want it to be 1 I think what we do is mod it by 21
-
+"""
 
 
 def ninth_slot_scan():
+    for 
     if invintory[1][1] == 4:
         invintory[1][1] = invintory[5][18]
     elif invintory[1][5] == 4:
@@ -389,7 +390,23 @@ def ninth_slot_scan():
         print("inventory is full")
         return
     invintory[5][18] = 4
-    
+
+
+
+class Inventory:
+    def __init__(self):
+        self.slots = [4,4,4,4,4,4,4,4]
+        self.ninth_slot = 4
+    def move_object(selected_item):
+        if i.ninth_slot == 4:
+            i.slots[selected_item] = i.ninth_slot
+        else:
+            print("slot is is full")
+
+
+
+i = Inventory()
+i.slots[5] 
 
 
 
@@ -568,12 +585,6 @@ invintory =[
 ]
 
 
-invintory[1][1] = 8
-invintory[1][5] = 8
-invintory[1][9] = 8
-invintory[1][13] = 8
-invintory[5][1] = 8
-invintory[5][5] = 8
 
 #    TEST inventory 1by1
 
