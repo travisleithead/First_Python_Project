@@ -201,8 +201,30 @@ def draw_room_parts():
 
 
 def draw_inventory():
-    print("\n" + "use 1u, 2u, 3u ect. to select and use an item." + "\n\n" + "press q to quit the inventory" + "\n")
-    current_row_num = 0
+    print("\n\n" + "use 1u, 2u, 3u ect. to select and use an item." + "\n\n" + 
+          "press q to quit the inventory" + "\n\n"
+         )
+    print(
+        "+ - +  + - +  + - +  + - +\n" + 
+        "| " + i.slots[0] + " |" + "  " + "| " + i.slots[1] + " |" + "  " + 
+        "| " + i.slots[2] + " |" + "  " + "| " + i.slots[3] + " |" + "\n" + "+ " + 
+        ("^" if i.selected_slot == 0 else "-") + " +" + "  " + "+ " + 
+        ("^" if i.selected_slot == 1 else "-") + " +" + "  " + "+ " + 
+        ("^" if i.selected_slot == 2 else "-") + " +" + "  " + "+ " + 
+        ("^" if i.selected_slot == 3 else "-") + " +\n\n" +
+        "+ - +  + - +  + - +  + - +  + - +\n" + 
+        "| " + i.slots[4] + " |" + "  " + "| " + i.slots[5] + " |" + "  " + 
+        "| " + i.slots[6] + " |" + "  " + "| " + i.slots[7] + " |" + "  " + 
+        "| " + i.ninth_slot + " |\n" +"+ " + 
+        ("^" if i.selected_slot == 4 else "-") + " +" + "  " + "+ " + 
+        ("^" if i.selected_slot == 5 else "-") + " +" + "  " + "+ " + 
+        ("^" if i.selected_slot == 6 else "-") + " +" + "  " + "+ " + 
+        ("^" if i.selected_slot == 7 else "-") + " +" + "    " + "+ " + 
+        ("^" if i.selected_slot == 8 else "-") + " +"
+         )
+    print("\n\n\n")
+
+    """current_row_num = 0
     # [TL] This draw function looks only at the "invintory" array for 
     #      deciding what to draw. It turns out that the array elements in
     #      "invintory" are never modified (by "controller_in_inventory"),
@@ -239,7 +261,8 @@ def draw_inventory():
         #this is post column processing
         print(temp_str)
         current_row_num += 1
-    print("\n\n\n")
+    """
+    
 
 
 
@@ -299,9 +322,27 @@ def controller_in_inventory():
     if button == "q":
         controller_type = 0
         scene_type = 0
+    
+    if button == 1:
+        i.selected_slot = 0
+    if button == 2:
+        i.selected_slot = 1
+    if button == 3:
+        i.selected_slot = 2
+    if button == 4:
+        i.selected_slot = 3
+    if button == 5:
+        i.selected_slot = 4
+    if button == 6:
+        i.selected_slot = 5
+    if button == 7:
+        i.selected_slot = 6
+    if button == 8:
+        i.selected_slot = 7
+    
 
 
-
+"""
     invintory[2][1] = 1
     invintory[2][5] = 1
     invintory[2][9] = 1
@@ -349,11 +390,12 @@ def controller_in_inventory():
         move_object(8)
     elif button == "9u":
         ninth_slot_scan()
-    
+"""
 
 
 
-    """source_row = 1 if selected_item < 5 else 5
+"""
+    source_row = 1 if selected_item < 5 else 5
     source_column = (((selected_item - 1) * 4) + 1) % 16
     if invintory[source_row][source_column] == 4:
         print("cannot move nothing")
@@ -365,11 +407,11 @@ def controller_in_inventory():
     invintory[source_row][source_column] = 4
     #   the four different slot collumn numbers that you are trying to land in are [5][1,5,9,13]
     #   second row is 22 but we want it to be 1 I think what we do is mod it by 21
-"""
 
 
-def ninth_slot_scan():
-    for 
+
+
+
     if invintory[1][1] == 4:
         invintory[1][1] = invintory[5][18]
     elif invintory[1][5] == 4:
@@ -390,23 +432,31 @@ def ninth_slot_scan():
         print("inventory is full")
         return
     invintory[5][18] = 4
-
+"""
 
 
 class Inventory:
     def __init__(self):
         self.slots = [4,4,4,4,4,4,4,4]
         self.ninth_slot = 4
+        self.selected_slot = 0
     def move_object(selected_item):
         if i.ninth_slot == 4:
             i.slots[selected_item] = i.ninth_slot
+        elif i.ninth_slot != 4:
+            slot_nine = i.ninth_slot
+            i.ninth_slot = i.slots[selected_item]
+            i.slots[selected_item] = slot_nine
+    def ninth_slot_scan():
+        for index in range(8):
+            if i.slots[index] == 4:
+                i.slots[index] = i.ninth_slot
         else:
-            print("slot is is full")
+            print("inventory is full")
 
 
 
 i = Inventory()
-i.slots[5] 
 
 
 
