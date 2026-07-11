@@ -204,23 +204,22 @@ def draw_inventory():
     print("\n\n" + "use 1u, 2u, 3u ect. to select and use an item." + "\n\n" + 
           "press q to quit the inventory" + "\n\n"
          )
-    print(
-        "+ - +  + - +  + - +  + - +\n" + 
-        "| " + i.slots[0] + " |" + "  " + "| " + i.slots[1] + " |" + "  " + 
-        "| " + i.slots[2] + " |" + "  " + "| " + i.slots[3] + " |" + "\n" + "+ " + 
-        ("^" if i.selected_slot == 0 else "-") + " +" + "  " + "+ " + 
-        ("^" if i.selected_slot == 1 else "-") + " +" + "  " + "+ " + 
-        ("^" if i.selected_slot == 2 else "-") + " +" + "  " + "+ " + 
-        ("^" if i.selected_slot == 3 else "-") + " +\n\n" +
-        "+ - +  + - +  + - +  + - +  + - +\n" + 
-        "| " + i.slots[4] + " |" + "  " + "| " + i.slots[5] + " |" + "  " + 
-        "| " + i.slots[6] + " |" + "  " + "| " + i.slots[7] + " |" + "  " + 
-        "| " + i.ninth_slot + " |\n" +"+ " + 
-        ("^" if i.selected_slot == 4 else "-") + " +" + "  " + "+ " + 
-        ("^" if i.selected_slot == 5 else "-") + " +" + "  " + "+ " + 
-        ("^" if i.selected_slot == 6 else "-") + " +" + "  " + "+ " + 
-        ("^" if i.selected_slot == 7 else "-") + " +" + "    " + "+ " + 
-        ("^" if i.selected_slot == 8 else "-") + " +"
+    print("+ - +  + - +  + - +  + - +\n" + 
+          "| " + str(i.slots[0]) + " |" + "  " + "| " + str(i.slots[1]) + " |" + "  " + 
+          "| " + str(i.slots[2]) + " |" + "  " + "| " + str(i.slots[3]) + " |" + "\n" + "+ " + 
+          ("^" if i.selected_slot == 0 else "-") + " +" + "  " + "+ " + 
+          ("^" if i.selected_slot == 1 else "-") + " +" + "  " + "+ " + 
+          ("^" if i.selected_slot == 2 else "-") + " +" + "  " + "+ " + 
+          ("^" if i.selected_slot == 3 else "-") + " +\n\n" +
+          "+ - +  + - +  + - +  + - +    + - +\n" + 
+          "| " + str(i.slots[4]) + " |" + "  " + "| " + str(i.slots[5]) + " |" + "  " + 
+          "| " + str(i.slots[6]) + " |" + "  " + "| " + str(i.slots[7]) + " |" + "    " + 
+          "| " + str(i.ninth_slot) + " |\n" +"+ " + 
+          ("^" if i.selected_slot == 4 else "-") + " +" + "  " + "+ " + 
+          ("^" if i.selected_slot == 5 else "-") + " +" + "  " + "+ " + 
+          ("^" if i.selected_slot == 6 else "-") + " +" + "  " + "+ " + 
+          ("^" if i.selected_slot == 7 else "-") + " +" + "    " + "+ " + 
+          ("^" if i.selected_slot == 8 else "-") + " +"
          )
     print("\n\n\n")
 
@@ -322,23 +321,28 @@ def controller_in_inventory():
     if button == "q":
         controller_type = 0
         scene_type = 0
-    
+
+    button = int(button)
+
     if button == 1:
         i.selected_slot = 0
-    if button == 2:
+    elif button == 2:
         i.selected_slot = 1
-    if button == 3:
+    elif button == 3:
         i.selected_slot = 2
-    if button == 4:
+    elif button == 4:
         i.selected_slot = 3
-    if button == 5:
+    elif button == 5:
         i.selected_slot = 4
-    if button == 6:
+    elif button == 6:
         i.selected_slot = 5
-    if button == 7:
+    elif button == 7:
         i.selected_slot = 6
-    if button == 8:
+    elif button == 8:
         i.selected_slot = 7
+    elif button == 9:
+        i.selected_slot = 8
+
     
 
 
