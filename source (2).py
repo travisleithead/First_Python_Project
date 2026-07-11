@@ -195,17 +195,21 @@ def draw_inventory():
     print("\n\n" + "use 1u, 2u, 3u ect. to select and use an item." + "\n\n" + 
           "press q to quit the inventory" + "\n\n"
          )
-    print("+ - +  + - +  + - +  + - +\n" + 
-          "| " + str(i.slots[0]) + " |" + "  " + "| " + str(i.slots[1]) + " |" + "  " + 
-          "| " + str(i.slots[2]) + " |" + "  " + "| " + str(i.slots[3]) + " |" + "\n" + "+ " + 
+    print("+ - +  + - +  + - +  + - +\n" + "| " + 
+          (" " if i.slots[0] == None else i.slots[0].symbol) + " |" + "  " + "| " + 
+          (" " if i.slots[1] == None else i.slots[1].symbol) + " |" + "  " + "| " + 
+          (" " if i.slots[2] == None else i.slots[2].symbol) + " |" + "  " + "| " + 
+          (" " if i.slots[3] == None else i.slots[3].symbol) + " |" + "\n" + "+ " + 
           ("^" if i.selected_slot == 0 else "-") + " +" + "  " + "+ " + 
           ("^" if i.selected_slot == 1 else "-") + " +" + "  " + "+ " + 
           ("^" if i.selected_slot == 2 else "-") + " +" + "  " + "+ " + 
           ("^" if i.selected_slot == 3 else "-") + " +\n\n" +
-          "+ - +  + - +  + - +  + - +    + - +\n" + 
-          "| " + str(i.slots[4]) + " |" + "  " + "| " + str(i.slots[5]) + " |" + "  " + 
-          "| " + str(i.slots[6]) + " |" + "  " + "| " + str(i.slots[7]) + " |" + "    " + 
-          "| " + str(i.ninth_slot) + " |\n" +"+ " + 
+          "+ - +  + - +  + - +  + - +    + - +\n" + "| " + 
+          (" " if i.slots[4] == None else i.slots[4].symbol) + " |" + "  " + "| " + 
+          (" " if i.slots[5] == None else i.slots[5].symbol) + " |" + "  " + "| " + 
+          (" " if i.slots[6] == None else i.slots[6].symbol) + " |" + "  " + "| " + 
+          (" " if i.slots[7] == None else i.slots[7].symbol) + " |" + "    " + "| " + 
+          (" " if i.ninth_slot == None else i.ninth_slot.symbol) + " |\n" +"+ " + 
           ("^" if i.selected_slot == 4 else "-") + " +" + "  " + "+ " + 
           ("^" if i.selected_slot == 5 else "-") + " +" + "  " + "+ " + 
           ("^" if i.selected_slot == 6 else "-") + " +" + "  " + "+ " + 
@@ -273,47 +277,82 @@ def controller_in_inventory():
         controller_type = 0
         scene_type = 0
 
-    button = int(button)
+    if button == "1u":
+        i.move_object(0)
+    elif button == "2u":
+        i.move_object(1)
+    elif button == "3u":
+        i.move_object(2)
+    elif button == "4u":
+        i.move_object(3)
+    elif button == "5u":
+        i.move_object(4)
+    elif button == "6u":
+        i.move_object(5)
+    elif button == "7u":
+        i.move_object(6)
+    elif button == "8u":
+        i.move_object(7)
 
-    if button == 1:
+    elif button == "9u":
+        i.ninth_slot_scan()
+
+    if button == "1":
         i.selected_slot = 0
-    elif button == 2:
+    elif button == "2":
         i.selected_slot = 1
-    elif button == 3:
+    elif button == "3":
         i.selected_slot = 2
-    elif button == 4:
+    elif button == "4":
         i.selected_slot = 3
-    elif button == 5:
+    elif button == "5":
         i.selected_slot = 4
-    elif button == 6:
+    elif button == "6":
         i.selected_slot = 5
-    elif button == 7:
+    elif button == "7":
         i.selected_slot = 6
-    elif button == 8:
+    elif button == "8":
         i.selected_slot = 7
-    elif button == 9:
+    elif button == "9":
         i.selected_slot = 8
 
-    
+
 
 class Inventory:
     def __init__(self):
-        self.slots = [4,4,4,4,4,4,4,4]
-        self.ninth_slot = 4
+        self.slots = [inventory_item(map, "A crinckled up piece of paper with scrawled markings " \
+                      "appearing to be in the shape of rooms you have explored", "□"),
+                      None,None,None,None,None,None,None]
+        self.ninth_slot = None
         self.selected_slot = 0
-    def move_object(selected_item):
-        if i.ninth_slot == 4:
-            i.slots[selected_item] = i.ninth_slot
-        elif i.ninth_slot != 4:
-            slot_nine = i.ninth_slot
-            i.ninth_slot = i.slots[selected_item]
-            i.slots[selected_item] = slot_nine
-    def ninth_slot_scan():
+    def move_object(self, selected_item):
+        if self.ninth_slot == None:
+            i.ninth_slot = self.slots[selected_item]
+            self.slots[selected_item] = None
+        elif self.ninth_slot != None:
+            slot_nine = self.ninth_slot
+            self.ninth_slot = self.slots[selected_item]
+            self.slots[selected_item] = slot_nine
+    def ninth_slot_scan(self):
         for index in range(8):
-            if i.slots[index] == 4:
-                i.slots[index] = i.ninth_slot
+            if self.slots[index] == None:
+                self.slots[index] = self.ninth_slot
+                self.ninth_slot = None
+                return
         else:
             print("inventory is full")
+
+
+
+
+
+
+
+class inventory_item:
+    def __init__ (self, name, description, symbol):
+        self.name = name
+        self.description = description
+        self.symbol = symbol
 
 
 
