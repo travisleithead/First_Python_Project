@@ -67,15 +67,6 @@ controller_type = 1
 
 inventory = True
 
-# [TL] I noticed that you have TWO "sources of truth" for your inventory.
-#      The first are these sets of global variables slotX and slotX_select
-#      which are the globals you are changing in the inventory controller.
-#      The second are down in another global variable that you called
-#      "invintory" (not to be confused with "inventory" ;-)
-#      To get the inventory system working, you'll need to pick one of these
-#      two "sources of truth" to be the actual source of truth. My recommendation
-#      is to use the array "invintory" vs the sets of globals.
-
 slot1 = 4
 
 slot2 = 4
@@ -223,46 +214,6 @@ def draw_inventory():
          )
     print("\n\n\n")
 
-    """current_row_num = 0
-    # [TL] This draw function looks only at the "invintory" array for 
-    #      deciding what to draw. It turns out that the array elements in
-    #      "invintory" are never modified (by "controller_in_inventory"),
-    #      so this function always draws the same thing.
-    for current_row in invintory:
-        #this is pre column processing
-        temp_str = ""
-        current_column_num = 0
-        for list_item in current_row:
-            if list_item in(2, 4, 5, 6, 7, 9, -10, -20, -30, -40):
-                temp_str = temp_str + " "
-            elif list_item == 0:
-                temp_str = temp_str + "+"
-            elif list_item == 1:
-                temp_str = temp_str + "-"
-            elif list_item == 3:
-                temp_str = temp_str + "|"
-            elif list_item == 10:
-                temp_str = temp_str + "^"
-            elif list_item == 20:
-                temp_str = temp_str + "∨"
-            elif list_item == 30:
-                temp_str = temp_str + "<"
-            elif list_item == 40:
-                temp_str = temp_str + ">"
-            elif list_item == 8:
-                temp_str = temp_str + "*"
-            elif list_item == slot1_select:
-                temp_str += 10
-            else:
-                temp_str = temp_str + "?"
-            temp_str = temp_str + " "
-            current_column_num += 1
-        #this is post column processing
-        print(temp_str)
-        current_row_num += 1
-    """
-    
-
 
 
 def controller():
@@ -344,100 +295,6 @@ def controller_in_inventory():
         i.selected_slot = 8
 
     
-
-
-"""
-    invintory[2][1] = 1
-    invintory[2][5] = 1
-    invintory[2][9] = 1
-    invintory[2][13] = 1
-    invintory[6][1] = 1
-    invintory[6][5] = 1
-    invintory[6][9] = 1
-    invintory[6][13] = 1
-    invintory[6][18] = 1
-    
-    if button == "1":
-       invintory[2][1] = 10
-    if button == "2":
-       invintory[2][5] = 10
-    if button == "3":
-       invintory[2][9] = 10
-    if button == "4":
-       invintory[2][13] = 10
-    if button == "5":
-       invintory[6][1] = 10
-    if button == "6":
-       invintory[6][5] = 10
-    if button == "7":
-       invintory[6][9] = 10
-    if button == "8":
-       invintory[6][13] = 10
-    if button == "9":
-       invintory[6][18] = 10
-
-    if button == "1u":
-        move_object(1)
-    elif button == "2u":
-        move_object(2)
-    elif button == "3u":
-        move_object(3)
-    elif button == "4u":
-        move_object(4)
-    elif button == "5u":
-        move_object(5)
-    elif button == "6u":
-        move_object(6)
-    elif button == "7u":
-        move_object(7)
-    elif button == "8u":
-        move_object(8)
-    elif button == "9u":
-        ninth_slot_scan()
-"""
-
-
-
-"""
-    source_row = 1 if selected_item < 5 else 5
-    source_column = (((selected_item - 1) * 4) + 1) % 16
-    if invintory[source_row][source_column] == 4:
-        print("cannot move nothing")
-        return
-    if invintory[5][18] != 4:
-        print("slot is full")
-        return
-    invintory[5][18] = invintory[source_row][source_column]
-    invintory[source_row][source_column] = 4
-    #   the four different slot collumn numbers that you are trying to land in are [5][1,5,9,13]
-    #   second row is 22 but we want it to be 1 I think what we do is mod it by 21
-
-
-
-
-
-    if invintory[1][1] == 4:
-        invintory[1][1] = invintory[5][18]
-    elif invintory[1][5] == 4:
-        invintory[1][5] = invintory[5][18]
-    elif invintory[1][9] == 4:
-        invintory[1][9] = invintory[5][18]
-    elif invintory[1][13] == 4:
-        invintory[1][13] = invintory[5][18]
-    elif invintory[5][1] == 4:
-        invintory[5][1] = invintory[5][18]
-    elif invintory[5][5] == 4:
-        invintory[5][5] = invintory[5][18]
-    elif invintory[5][9] == 4:
-        invintory[5][9] = invintory[5][18]
-    elif invintory[5][13] == 4:
-        invintory[5][13] = invintory[5][18]
-    else:
-        print("inventory is full")
-        return
-    invintory[5][18] = 4
-"""
-
 
 class Inventory:
     def __init__(self):
@@ -627,68 +484,10 @@ room_parts =[
 
 
 
-invintory =[
-
-[0,1,0,4,0,1,0,4,0,1,0,4,0,1,0],
-[3,slot1,3,4,3,slot2,3,4,3,slot3,3,4,3,slot4,3],
-[0,slot1_select,0,4,0,slot2_select,0,4,0,slot3_select,0,4,0,slot4_select,0],
-[4],
-[0,1,0,4,0,1,0,4,0,1,0,4,0,1,0,4,4,0,1,0],
-[3,slot5,3,4,3,slot6,3,4,3,slot7,3,4,3,slot8,3,4,4,3,slot9,3],
-[0,slot5_select,0,4,0,slot6_select,0,4,0,slot7_select,0,4,0,slot8_select,0,4,4,0,slot9_select,0],
-]
-
-
-
-#    TEST inventory 1by1
-
-# [TL] This is probably where your assumption was incorrect. By putting the 
-#      variables 'slot1' and 'slot1_select' into the array, I can see that
-#      you hoped that the variables would "stay" there and that by changing
-#      the global variables, it would update these elements in the array.
-#      Unfortunately, it doesn't work like that. This code below only ever runs
-#      once, to setup the array values. When it's running, the 'slot1' variable
-#      is read (to extract the value it contains, which starts out as 4) and 
-#      it's actually the literal value '4' that gets put into the array when it
-#      is made, not the variable itself. Make sense? So, from here on out, 
-#      whenever you are changing any of these global variables they ARE actually
-#      getting updated, BUT the values in this array are staying the same.
-#      If this array stays your "source of truth" for the inventory data, then
-#      you need to modify the specific values in this array in order for the
-#      "draw_inventory" function to see the changes. For example, the inventory
-#      controller would need to change 'invintory' as follows to change this data:
-#        invintory[1][1] = <new value for slot1>
-#      The above line gets the 2nd sub-array out of 'invintory', then references
-#      the 2nd array element (where you have the 'slot1' variable being read) and 
-#      changes it.
-#      "
-"""
-invintory = [
-[0,1,0],
-[3,slot1,3],
-[0,slot1_select,0]
-]
-
-"""
-
-#if inventory is True:
-#    print("+ - +   + - +   + - +   + - +\n" +
-#          "| " + slot1 + " |")
-         
-
 
 while game:
     draw()
     controller()
-#    if inventory is True:
-#        slot1_select, slot2_select, slot3_select, slot4_select, slot5_select, slot6_select, slot7_select, slot8_select, slot9_select, controller_type, scene_type, inventory = controller_in_inventory(slot1_select, slot2_select, slot3_select, slot4_select, slot5_select, slot6_select, slot7_select, slot8_select, slot9_select, controller_type, scene_type, inventory)
-
     game = not end_game()
     if game is False:
         draw()
-
-#discover_room(find_bottem_room_corners(10, 7))
-#discover_room(find_top_room_corners(4, 7))
-#discover_room(find_left_room_corners(7, 4))
-#discover_room(find_right_room_corners(7, 10))
-
