@@ -53,6 +53,9 @@
 
 #   GLOBAL VARIABLES
 
+from math import floor
+
+
 char_row = 7
 
 char_column = 7
@@ -315,6 +318,54 @@ def controller_in_inventory():
         i.selected_slot = 7
     elif button == "9":
         i.selected_slot = 8
+
+
+
+class World:
+    def __init__(self, current_floor):
+        self.floors = floor[current_floor]
+        self.current_floor = current_floor
+
+class Floor:
+    def __init__ (self, current_room):
+        self.rooms = [current_room]
+        self.current_room = current_room
+        self.previous_room = None
+        self.starting_room = current_room
+    def creat_room ():
+
+class Room:
+    def __init__ (self, character, n_wall, e_wall, s_wall, w_wall):
+        self.is_visible = True
+        self.character = character
+        self.n_wall = n_wall
+        self.e_wall = e_wall
+        self.s_wall = s_wall
+        self.w_wall = w_wall
+        self.room_items = self.room_items
+
+class Room_Item:
+    def __init__ (self, x, y):
+        self.item_x_pos = x
+        self.item_y_pos = y
+
+class Wall:
+    def _init__ (self, door, door_position):
+        self.doors = [door]
+        self.size = 4
+        self.door_positions = [door_position]
+
+class Door:
+    def __init__ (self, room):
+        self.type = "normal"
+        self.next_room = room
+        self.is_locked = False
+        self.lock_type = "normal"
+
+class Character:
+    def __init__ (self, x, y):
+        self.character_x_pos = x
+        self.character_y_pos = y
 
 
 
