@@ -326,13 +326,16 @@ class World:
         self.floors = floor[current_floor]
         self.current_floor = current_floor
 
+
+
 class Floor:
     def __init__ (self, current_room):
         self.rooms = [current_room]
         self.current_room = current_room
         self.previous_room = None
         self.starting_room = current_room
-    def creat_room ():
+
+
 
 class Room:
     def __init__ (self, character, n_wall, e_wall, s_wall, w_wall):
@@ -344,16 +347,22 @@ class Room:
         self.w_wall = w_wall
         self.room_items = self.room_items
 
+
+
 class Room_Item:
     def __init__ (self, x, y):
         self.item_x_pos = x
         self.item_y_pos = y
 
+
+
 class Wall:
-    def _init__ (self, door, door_position):
-        self.doors = [door]
-        self.size = 4
-        self.door_positions = [door_position]
+    def _init__ (self, wall_size):
+        self.doors = []
+        self.size = wall_size
+        self.door_positions = []
+
+
 
 class Door:
     def __init__ (self, room):
@@ -361,6 +370,8 @@ class Door:
         self.next_room = room
         self.is_locked = False
         self.lock_type = "normal"
+
+
 
 class Character:
     def __init__ (self, x, y):
@@ -405,11 +416,19 @@ class inventory_item:
         self.description = description
         self.symbol = symbol
 
-
-
 i = Inventory()
 
+c = Character(3,3)
 
+n_w = Wall(5)
+
+e_w = Wall(5)
+
+s_w = Wall(5)
+
+w_w = Wall(5)
+
+r = Room(c, n_w, e_w, s_w, w_w)
 
 def is_hidden_door(row, column):
     door = room_parts[row][column]
@@ -571,7 +590,6 @@ room_parts =[
 [4,4,4,4,4,6,4,4,4,6,4,4,4,4,4],
 [4,4,4,4,4,2,5,5,5,2,4,4,4,4,4]
 ]
-
 
 
 
