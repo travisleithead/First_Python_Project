@@ -346,6 +346,33 @@ class Room:
         self.s_wall = s_wall
         self.w_wall = w_wall
         self.room_items = self.room_items
+    def recalculate_master_map (self):
+        self.master_map = []
+        for row in range(self.w_wall.size - 1):
+            temp_row = []
+            for column in range(self.n_wall.size - 1):
+                temp_row.append(" ")
+            self.master_map.append(temp_row) 
+        temp_row = []
+        for index in range(self.n_wall.size):
+            temp_row.append(self.n_wall.get_wall_symbol(index))
+        self.master_map.insert(0, temp_row)
+        for index in range (self.e_wall.size):
+            self.master_map[index].append(self.e_wall.get_wall_symbol(index))
+        temp_row = []
+        for index in range (self.s_wall.size):
+            temp_row.insert(0, self.s_wall.get_wall_symbol(index))
+        self.master_map.append(temp_row)
+        for index in range (self.w_wall.size):
+            find_correct_array = (len(self.master_map) - 1 - index)
+            self.master_map.insert(find_correct_array, self.w_wall.get_wall_symbol(index))
+        self.master_map[2][2] = "□"
+    def is_point_in_room (self, x, y):
+        if x < len(self.master_map[0]) and y < len(self.master_map):
+            return True
+        return False
+    def get_room_symbol (self, x, y):
+        return self.master_map[x][y]
 
 
 
@@ -356,11 +383,41 @@ class Room_Item:
 
 
 
+#   Note to self:
+#       ensure door positions are not 0
+
+
+
 class Wall:
-    def _init__ (self, wall_size):
+    def _init__ (self, wall_size, direction):
+        self.direction = direction # 0 = North, 1 = East, 2 = South, 3 = West
         self.doors = []
         self.size = wall_size
         self.door_positions = []
+    def add_door (self, door, door_pos):
+        if door_pos >= self.size:
+            print("assertion error: door position out of bounds")
+            return
+        self.doors.append(door)
+        self.door_positions.append(door_pos)    
+    def get_wall_symbol (self, wall_position):
+        self.wall_position = wall_position
+        if wall_position == 0:
+            return "+"
+        for door_index in self.door_positions:
+            if door_index == wall_position:
+                if self.direction == 0:    
+                    return "^"
+                elif self.direction == 1:
+                    return ">"
+                elif self.direction == 2:
+                    return "∨"
+                else:
+                    return "<"
+#   at this point we know we have a wall because the program failed all of the door checks
+        if self.direction == 0 or self.direction == 2:
+            return "-"
+        return "|"
 
 
 
@@ -406,10 +463,6 @@ class Inventory:
 
 
 
-
-
-
-
 class inventory_item:
     def __init__ (self, name, description, symbol):
         self.name = name
@@ -420,13 +473,13 @@ i = Inventory()
 
 c = Character(3,3)
 
-n_w = Wall(5)
+n_w = Wall(4)
 
-e_w = Wall(5)
+e_w = Wall(4)
 
-s_w = Wall(5)
+s_w = Wall(4)
 
-w_w = Wall(5)
+w_w = Wall(4)
 
 r = Room(c, n_w, e_w, s_w, w_w)
 
