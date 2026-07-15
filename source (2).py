@@ -322,9 +322,11 @@ def controller_in_inventory():
 
 
 class World:
-    def __init__(self, current_floor):
+    def __init__ (self, current_floor):
         self.floors = floor[current_floor]
         self.current_floor = current_floor
+    def draw (self):
+        self.current_floor.draw()
 
 
 
@@ -334,6 +336,13 @@ class Floor:
         self.current_room = current_room
         self.previous_room = None
         self.starting_room = current_room
+    def draw (self):
+        for row in range(10):
+            for column in range(10):
+                for room in self.rooms:
+                    if room.is_point_in_room(row, column):
+                        return room.get_room_symbol(row, column)
+
 
 
 
