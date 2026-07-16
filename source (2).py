@@ -3,6 +3,7 @@
 
 #           The underground mapping tool (UMT)
 
+import random
 
 #       diagram for room vars.
 
@@ -323,10 +324,10 @@ def controller_in_inventory():
 
 class World:
     def __init__ (self, current_floor):
-        self.floors = floor[current_floor]
+        self.floors = [current_floor]
         self.current_floor = current_floor
-    def draw (self):
-        self.current_floor.draw()
+    def draw (self, rand_length_side, rand_length_floor):
+        self.current_floor.draw(rand_length_side, rand_length_floor)
 
 
 
@@ -336,13 +337,14 @@ class Floor:
         self.current_room = current_room
         self.previous_room = None
         self.starting_room = current_room
-    def draw (self):
-        for row in range(10):
-            for column in range(10):
+    def draw (self, rand_length_side, rand_length_floor):
+        for row in range(rand_length_side + 1):
+            symbol = ""
+            for column in range(rand_length_floor + 1):
                 for room in self.rooms:
                     if room.is_point_in_room(row, column):
-                        return room.get_room_symbol(row, column)
-
+                        symbol += room.get_room_symbol(row, column)
+            print(symbol)
 
 
 
@@ -354,30 +356,31 @@ class Room:
         self.e_wall = e_wall
         self.s_wall = s_wall
         self.w_wall = w_wall
-        self.room_items = self.room_items
-    def recalculate_master_map (self):
+        self.room_items = None
         self.master_map = []
+        self.recalculate_master_map()
+    def recalculate_master_map (self):
         for row in range(self.w_wall.size - 1):
             temp_row = []
             for column in range(self.n_wall.size - 1):
-                temp_row.append(" ")
+                temp_row.append("  ")
             self.master_map.append(temp_row) 
         temp_row = []
         for index in range(self.n_wall.size):
-            temp_row.append(self.n_wall.get_wall_symbol(index))
+            temp_row.append(self.n_wall.get_wall_symbol(index) + " ")
         self.master_map.insert(0, temp_row)
         for index in range (self.e_wall.size):
-            self.master_map[index].append(self.e_wall.get_wall_symbol(index))
+            self.master_map[index].append(self.e_wall.get_wall_symbol(index) + " ")
         temp_row = []
         for index in range (self.s_wall.size):
-            temp_row.insert(0, self.s_wall.get_wall_symbol(index))
+            temp_row.insert(0, self.s_wall.get_wall_symbol(index) + " ")
         self.master_map.append(temp_row)
         for index in range (self.w_wall.size):
-            find_correct_array = (len(self.master_map) - 1 - index)
-            self.master_map.insert(find_correct_array, self.w_wall.get_wall_symbol(index))
-        self.master_map[2][2] = "□"
+            find_correct_column = (len(self.master_map) - 1 - index)
+            self.master_map[find_correct_column].insert(0, self.w_wall.get_wall_symbol(index) + " ")
+        self.master_map[1][1] = "□ "
     def is_point_in_room (self, x, y):
-        if x < len(self.master_map[0]) and y < len(self.master_map):
+        if x <= self.e_wall.size and y <= self.n_wall.size:
             return True
         return False
     def get_room_symbol (self, x, y):
@@ -398,7 +401,7 @@ class Room_Item:
 
 
 class Wall:
-    def _init__ (self, wall_size, direction):
+    def __init__ (self, wall_size, direction):
         self.direction = direction # 0 = North, 1 = East, 2 = South, 3 = West
         self.doors = []
         self.size = wall_size
@@ -478,19 +481,29 @@ class inventory_item:
         self.description = description
         self.symbol = symbol
 
+rand_length_side = random.choice([2, 4, 6])
+
+rand_length_floor = random.choice([2, 4, 6])
+
+print(rand_length_floor)
+
+print(rand_length_side)
+
 i = Inventory()
 
 c = Character(3,3)
+ 
+n_w = Wall(rand_length_floor, 0)
 
-n_w = Wall(4)
+e_w = Wall(rand_length_side, 1)
 
-e_w = Wall(4)
+s_w = Wall(rand_length_floor, 2)
 
-s_w = Wall(4)
-
-w_w = Wall(4)
+w_w = Wall(rand_length_side, 3)
 
 r = Room(c, n_w, e_w, s_w, w_w)
+
+f = Floor(r)
 
 def is_hidden_door(row, column):
     door = room_parts[row][column]
@@ -654,10 +667,15 @@ room_parts =[
 ]
 
 
-
+"""
 while game:
     draw()
     controller()
     game = not end_game()
     if game is False:
         draw()
+"""
+
+world = World(f)
+
+world.draw(rand_length_side, rand_length_floor)
