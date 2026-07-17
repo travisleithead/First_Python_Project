@@ -326,8 +326,8 @@ class World:
     def __init__ (self, current_floor):
         self.floors = [current_floor]
         self.current_floor = current_floor
-    def draw (self, rand_length_side, rand_length_floor):
-        self.current_floor.draw(rand_length_side, rand_length_floor)
+    def draw (self, world_height, world_width):
+        self.current_floor.draw(world_height, world_width)
 
 
 
@@ -337,19 +337,21 @@ class Floor:
         self.current_room = current_room
         self.previous_room = None
         self.starting_room = current_room
-    def draw (self, rand_length_side, rand_length_floor):
-        for row in range(rand_length_side + 1):
+    def draw (self, floor_height, floor_width):
+        for floor_row in range(floor_height + 1):
             symbol = ""
-            for column in range(rand_length_floor + 1):
+            for floor_column in range(floor_width + 1):
                 for room in self.rooms:
-                    if room.is_point_in_room(row, column):
-                        symbol += room.get_room_symbol(row, column)
+                    if room.is_point_in_room(floor_row, floor_column):
+                        symbol += room.get_room_symbol(floor_row, floor_column)
+                    else:
+                        symbol += "  "
             print(symbol)
 
 
 
 class Room:
-    def __init__ (self, character, n_wall, e_wall, s_wall, w_wall):
+    def __init__ (self, character, n_wall, e_wall, s_wall, w_wall, floor_offset):
         self.is_visible = True
         self.character = character
         self.n_wall = n_wall
@@ -358,6 +360,7 @@ class Room:
         self.w_wall = w_wall
         self.room_items = None
         self.master_map = []
+        self.floor_offset = floor_offset
         self.recalculate_master_map()
     def recalculate_master_map (self):
         for row in range(self.w_wall.size - 1):
@@ -379,12 +382,15 @@ class Room:
             find_correct_column = (len(self.master_map) - 1 - index)
             self.master_map[find_correct_column].insert(0, self.w_wall.get_wall_symbol(index) + " ")
         self.master_map[1][1] = "□ "
-    def is_point_in_room (self, x, y):
-        if x <= self.e_wall.size and y <= self.n_wall.size:
+    def is_point_in_room (self, floor_x, floor_y):
+        if (floor_x - self.floor_offset.x) < 0 and (floor_y - self.floor_offset.y) < 0:
+            return False
+        if (floor_x - self.floor_offset.x) <= self.e_wall.size and \
+        (floor_y - self.floor_offset.y) <= self.n_wall.size:
             return True
         return False
-    def get_room_symbol (self, x, y):
-        return self.master_map[x][y]
+    def get_room_symbol (self, floor_x, floor_y):
+        return self.master_map[(floor_x - self.floor_offset.x)][floor_y - self.floor_offset.y]
 
 
 
@@ -442,10 +448,10 @@ class Door:
 
 
 
-class Character:
+class Coordinate:
     def __init__ (self, x, y):
-        self.character_x_pos = x
-        self.character_y_pos = y
+        self.x = x
+        self.y = y
 
 
 
@@ -481,18 +487,26 @@ class inventory_item:
         self.description = description
         self.symbol = symbol
 
-rand_length_side = random.choice([2, 4, 6])
+rand_length_side = random.choice([2, 4, 9])
 
-rand_length_floor = random.choice([2, 4, 6])
+rand_length_floor = random.choice([2, 4, 9])
 
+rand_length_side = 4
+
+rand_length_floor = 4
+
+"""
 print(rand_length_floor)
 
 print(rand_length_side)
+"""
 
 i = Inventory()
 
-c = Character(3,3)
- 
+character = Coordinate(3,3)
+
+coordinate = Coordinate(4,4)
+
 n_w = Wall(rand_length_floor, 0)
 
 e_w = Wall(rand_length_side, 1)
@@ -501,9 +515,18 @@ s_w = Wall(rand_length_floor, 2)
 
 w_w = Wall(rand_length_side, 3)
 
-r = Room(c, n_w, e_w, s_w, w_w)
+n_w.add_door(Door(None), 2)
+
+e_w.add_door(Door(None), 2)
+
+s_w.add_door(Door(None), 2)
+
+w_w.add_door(Door(None), 2)
+
+r = Room(character, n_w, e_w, s_w, w_w, coordinate)
 
 f = Floor(r)
+
 
 def is_hidden_door(row, column):
     door = room_parts[row][column]
@@ -678,4 +701,4 @@ while game:
 
 world = World(f)
 
-world.draw(rand_length_side, rand_length_floor)
+world.draw(10, 10)
