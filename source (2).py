@@ -338,15 +338,18 @@ class Floor:
         self.previous_room = None
         self.starting_room = current_room
     def draw (self, floor_height, floor_width):
+        room_found = False
         for floor_row in range(floor_height + 1):
-            symbol = ""
+            row_symbols = ""
             for floor_column in range(floor_width + 1):
+                symbol = "  "
                 for room in self.rooms:
                     if room.is_point_in_room(floor_row, floor_column):
-                        symbol += room.get_room_symbol(floor_row, floor_column)
-                    else:
-                        symbol += "  "
-            print(symbol)
+                        symbol = room.get_room_symbol(floor_row, floor_column)
+                row_symbols += symbol
+            print(row_symbols)
+    def add_room (self, new_room):
+        self.rooms.append (new_room)
 
 
 
@@ -383,7 +386,7 @@ class Room:
             self.master_map[find_correct_column].insert(0, self.w_wall.get_wall_symbol(index) + " ")
         self.master_map[1][1] = "□ "
     def is_point_in_room (self, floor_x, floor_y):
-        if (floor_x - self.floor_offset.x) < 0 and (floor_y - self.floor_offset.y) < 0:
+        if (floor_x - self.floor_offset.x) < 0 or (floor_y - self.floor_offset.y) < 0:
             return False
         if (floor_x - self.floor_offset.x) <= self.e_wall.size and \
         (floor_y - self.floor_offset.y) <= self.n_wall.size:
@@ -505,7 +508,9 @@ i = Inventory()
 
 character = Coordinate(3,3)
 
-coordinate = Coordinate(4,4)
+coordinate = Coordinate(4, 9)
+
+coordinate2 = Coordinate(4, 4)
 
 n_w = Wall(rand_length_floor, 0)
 
@@ -515,18 +520,25 @@ s_w = Wall(rand_length_floor, 2)
 
 w_w = Wall(rand_length_side, 3)
 
-n_w.add_door(Door(None), 2)
+n_w2 = Wall(rand_length_floor, 0)
 
-e_w.add_door(Door(None), 2)
+e_w2 = Wall(rand_length_side, 1)
 
-s_w.add_door(Door(None), 2)
+s_w2 = Wall(rand_length_floor, 2)
+
+w_w2 = Wall(rand_length_side, 3)
 
 w_w.add_door(Door(None), 2)
 
+e_w2.add_door(Door(None), 2)
+
 r = Room(character, n_w, e_w, s_w, w_w, coordinate)
+
+r2 = Room(character, n_w2, e_w2, s_w2, w_w2, coordinate2)
 
 f = Floor(r)
 
+f.add_room(r2)
 
 def is_hidden_door(row, column):
     door = room_parts[row][column]
@@ -701,4 +713,4 @@ while game:
 
 world = World(f)
 
-world.draw(10, 10)
+world.draw(20, 20)
