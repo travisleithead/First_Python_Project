@@ -151,10 +151,12 @@ def is_in_world(row, column):
 
 def draw():
     if scene_type == 0:
+        world.draw(20, 20)
+        """
         draw_room_parts()
+        """
     if scene_type == 1:
         draw_inventory()
-
 
 
 
@@ -234,21 +236,28 @@ def controller():
 
 
 def controller_in_rooms():
+    """
     global char_column
     global char_row
+    """
     global controller_type
     global scene_type
+    
 #    global inventory
     
 #    inventory = False
     button = input()
-    old_loc_row = char_row
-    old_loc_col = char_column
+#    old_loc_row = char_row
+#a    old_loc_col = char_column
     if button == "e":
         controller_type = 1
         scene_type = 1
-    if button == "a" and not is_wall(char_row, char_column - 1):
-        char_column -= 1
+    if button == "w":
+        f.current_room.update_char_pos(0)
+    if button == "s":
+        f.current_room.update_char_pos(1)
+#        char_column -= 1
+        """
     if button == "d" and not is_wall(char_row, char_column + 1):
         char_column += 1
     if button == "w" and not is_wall(char_row - 1, char_column):
@@ -264,7 +273,7 @@ def controller_in_rooms():
                     discover_room(find_top_room_corners(char_row, char_column))
         if button == "s":
                     discover_room(find_bottem_room_corners(char_row, char_column))
-
+"""
 
 
 
@@ -364,8 +373,10 @@ class Room:
         self.room_items = None
         self.master_map = []
         self.floor_offset = floor_offset
+        self.is_current_room = True
         self.recalculate_master_map()
     def recalculate_master_map (self):
+        self.master_map = []
         for row in range(self.w_wall.size - 1):
             temp_row = []
             for column in range(self.n_wall.size - 1):
@@ -384,7 +395,8 @@ class Room:
         for index in range (self.w_wall.size):
             find_correct_column = (len(self.master_map) - 1 - index)
             self.master_map[find_correct_column].insert(0, self.w_wall.get_wall_symbol(index) + " ")
-        self.master_map[1][1] = "□ "
+        if self.is_current_room == True:
+            self.master_map[self.character.y][self.character.x] = "□ "
     def is_point_in_room (self, floor_x, floor_y):
         if (floor_x - self.floor_offset.x) < 0 or (floor_y - self.floor_offset.y) < 0:
             return False
@@ -394,6 +406,19 @@ class Room:
         return False
     def get_room_symbol (self, floor_x, floor_y):
         return self.master_map[(floor_x - self.floor_offset.x)][floor_y - self.floor_offset.y]
+    def update_is_current_room (self, new_is_current_room):
+        self.is_current_room = new_is_current_room
+        self.recalculate_master_map()
+    def update_char_pos (self, direction):
+        if direction == 0:
+            if (self.character.y - 1) == 0 and not self.n_wall.is_char_in_door(self.character.x):
+                return
+            self.character.y -= 1
+        if direction == 1:
+            if (self.character.y + 1) == (len(self.master_map) - 1) and not Wall.is_char_in_door(direction, 2):
+                return
+            self.character.y += 1
+        self.recalculate_master_map()
 
 
 
@@ -439,6 +464,16 @@ class Wall:
         if self.direction == 0 or self.direction == 2:
             return "-"
         return "|"
+    def is_char_in_door (self,room_pos):
+        if self.direction == 0:
+            if room_pos in self.door_positions:
+                return True
+            return False
+        if self.direction == 2:
+            if (len(self.size) - room_pos) in self.door_positions:
+                return True
+            return False
+
 
 
 
@@ -490,6 +525,8 @@ class inventory_item:
         self.description = description
         self.symbol = symbol
 
+
+
 rand_length_side = random.choice([2, 4, 9])
 
 rand_length_floor = random.choice([2, 4, 9])
@@ -535,6 +572,8 @@ e_w2.add_door(Door(None), 2)
 r = Room(character, n_w, e_w, s_w, w_w, coordinate)
 
 r2 = Room(character, n_w2, e_w2, s_w2, w_w2, coordinate2)
+
+r2.update_is_current_room (False)
 
 f = Floor(r)
 
@@ -701,16 +740,13 @@ room_parts =[
 [4,4,4,4,4,2,5,5,5,2,4,4,4,4,4]
 ]
 
+world = World(f)
 
-"""
 while game:
     draw()
     controller()
     game = not end_game()
     if game is False:
         draw()
-"""
 
-world = World(f)
 
-world.draw(20, 20)
