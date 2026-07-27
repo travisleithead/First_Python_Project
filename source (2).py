@@ -256,6 +256,11 @@ def controller_in_rooms():
         f.current_room.update_char_pos(0)
     if button == "s":
         f.current_room.update_char_pos(1)
+    if button == "a":
+        f.current_room.update_char_pos(2)
+    if button == "d":
+        f.current_room.update_char_pos(3)
+    
 #        char_column -= 1
         """
     if button == "d" and not is_wall(char_row, char_column + 1):
@@ -372,31 +377,45 @@ class Room:
         self.w_wall = w_wall
         self.room_items = None
         self.master_map = []
+        self.logi_map = []
         self.floor_offset = floor_offset
         self.is_current_room = True
         self.recalculate_master_map()
     def recalculate_master_map (self):
         self.master_map = []
+        self.logi_map = []
         for row in range(self.w_wall.size - 1):
-            temp_row = []
+            temp_row_m = []
+            temp_row_l = []
             for column in range(self.n_wall.size - 1):
-                temp_row.append("  ")
-            self.master_map.append(temp_row) 
-        temp_row = []
+                temp_row_m.append("  ")
+                temp_row_l.append(0) # 0 = emty space
+            self.master_map.append(temp_row_m) 
+            self.logi_map.append(temp_row_l)
+        temp_row_m = []
+        temp_row_l = []
         for index in range(self.n_wall.size):
-            temp_row.append(self.n_wall.get_wall_symbol(index) + " ")
-        self.master_map.insert(0, temp_row)
+            temp_row_m.append(self.n_wall.get_wall_symbol(index) + " ")
+            temp_row_l.append(self.n_wall.get_wall_symbol_logic(index))
+        self.master_map.insert(0, temp_row_m)
+        self.logi_map.insert(0, temp_row_l)
         for index in range (self.e_wall.size):
             self.master_map[index].append(self.e_wall.get_wall_symbol(index) + " ")
-        temp_row = []
+            self.logi_map[index].append(self.e_wall.get_wall_symbol_logic(index))
+        temp_row_m = []
+        temp_row_l = []
         for index in range (self.s_wall.size):
-            temp_row.insert(0, self.s_wall.get_wall_symbol(index) + " ")
-        self.master_map.append(temp_row)
+            temp_row_m.insert(0, self.s_wall.get_wall_symbol(index) + " ")
+            temp_row_l.insert(0, self.s_wall.get_wall_symbol_logic(index))
+        self.master_map.append(temp_row_m)
+        self.logi_map.append(temp_row_l)
         for index in range (self.w_wall.size):
             find_correct_column = (len(self.master_map) - 1 - index)
             self.master_map[find_correct_column].insert(0, self.w_wall.get_wall_symbol(index) + " ")
+            self.logi_map[find_correct_column].insert(0, self.w_wall.get_wall_symbol_logic(index))
         if self.is_current_room == True:
             self.master_map[self.character.y][self.character.x] = "□ "
+            self.logi_map[self.character.y][self.character.x] = 2
     def is_point_in_room (self, floor_x, floor_y):
         if (floor_x - self.floor_offset.x) < 0 or (floor_y - self.floor_offset.y) < 0:
             return False
@@ -411,13 +430,21 @@ class Room:
         self.recalculate_master_map()
     def update_char_pos (self, direction):
         if direction == 0:
-            if (self.character.y - 1) == 0 and not self.n_wall.is_char_in_door(self.character.x):
+            if self.logi_map[self.character.y - 1][self.character.x] == 1:
                 return
             self.character.y -= 1
         if direction == 1:
-            if (self.character.y + 1) == (len(self.master_map) - 1) and not Wall.is_char_in_door(direction, 2):
+            if self.logi_map[self.character.y + 1][self.character.x] == 1:
                 return
             self.character.y += 1
+        if direction == 2:
+            if self.logi_map[self.character.y][self.character.x - 1] == 1:
+                return
+            self.character.x -= 1
+        if direction == 3:
+            if self.logi_map[self.character.y][self.character.x + 1] == 1:
+                return
+            self.character.x += 1
         self.recalculate_master_map()
 
 
@@ -446,8 +473,21 @@ class Wall:
             return
         self.doors.append(door)
         self.door_positions.append(door_pos)    
+    def get_wall_symbol_logic (self, wall_position):
+        if wall_position == 0:
+            return 3 # 3 is the wall integer
+        for door_index in self.door_positions:
+            if door_index == wall_position:
+                if self.direction == 0:    
+                    return 4 # north wall value
+                elif self.direction == 1:
+                    return 5 # east wall value
+                elif self.direction == 2:
+                    return 6 # south wall value
+                else:
+                    return 7 # west wall value
+        return 1
     def get_wall_symbol (self, wall_position):
-        self.wall_position = wall_position
         if wall_position == 0:
             return "+"
         for door_index in self.door_positions:
@@ -464,17 +504,7 @@ class Wall:
         if self.direction == 0 or self.direction == 2:
             return "-"
         return "|"
-    def is_char_in_door (self,room_pos):
-        if self.direction == 0:
-            if room_pos in self.door_positions:
-                return True
-            return False
-        if self.direction == 2:
-            if (len(self.size) - room_pos) in self.door_positions:
-                return True
-            return False
-
-
+    
 
 
 class Door:
